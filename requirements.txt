@@ -1,0 +1,20 @@
+# Numerical & Data handling
+numpy
+pandas
+
+# Modeling & preprocessing
+scikit-learn
+
+# CatBoost
+catboost
+
+# Deep learning (for LSTM)
+torch
+
+# Plotting / EDA
+matplotlib
+seaborn
+
+# Jupyter / notebooks
+jupyter
+ipykernel
