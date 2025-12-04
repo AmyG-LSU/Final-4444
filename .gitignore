@@ -1,0 +1,69 @@
+# -----------------------------
+# Python Cache / Build Files
+# -----------------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+build/
+dist/
+
+# -----------------------------
+# Virtual Environments
+# -----------------------------
+.venv/
+venv/
+env/
+ENV/
+
+# -----------------------------
+# Jupyter Notebook Checkpoints
+# -----------------------------
+.ipynb_checkpoints/
+
+# -----------------------------
+# OS / System Files
+# -----------------------------
+.DS_Store
+Thumbs.db
+
+# -----------------------------
+# IDE / Editor Files
+# -----------------------------
+.vscode/
+.idea/
+
+# -----------------------------
+# Data Files
+# -----------------------------
+# Ignore ALL raw data by default
+data/**/*.csv
+data/**/*.xlsx
+data/**/*.xls
+data/**/*.json
+data/**/*.parquet
+
+# BUT allow the cleaned, final dataset:
+!data/clean/
+!data/clean/**
+
+# -----------------------------
+# Reports (if auto-generated)
+# -----------------------------
+reports/*.html
+reports/*.pdf
+reports/*.ipynb
+
+# -----------------------------
+# Logs
+# -----------------------------
+*.log
+
+# -----------------------------
+# Misc
+# -----------------------------
+*.tmp
+*.swp
+*.bak
+*.orig

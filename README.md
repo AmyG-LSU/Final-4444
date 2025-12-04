@@ -1,71 +1,74 @@
-# 🏡 Home Value Prediction (10-Year Forecasting Project)
+# 🏡 Home Value Prediction — ten year Forecasting Project
 
-## 📌 Overview
-This project aims to **predict the future value of a home 10 years from now** using a combination of historical housing data, socioeconomic indicators, and machine-learning models. The project uses a **five-year cleaned dataset** to train two core models:
+### CSC 4444 — Artificial Intelligence
 
-- **CatBoost Regressor** — for tabular, gradient-boosted predictions  
-- **LSTM Neural Network** — for sequential, time-dependent forecasting
+### Louisiana State University
 
-All data preparation, model training, and analysis scripts are included in this repository.
+---
 
-Project planning details and dataset strategy originate from our project notes.
+# 📌 Overview
+
+This project forecasts **Louisiana home values ten years into the future** using a combination of socioeconomic indicators, crime statistics, school performance data, and mortgage rate trends.  
+We construct a unified **five year aligned dataset** (2015–2019) and build two predictive models:
+
+- **CatBoost Regressor** (gradient-boosted tree model)
+- **LSTM Neural Network** (sequence model for time-dependent trends)
+
+This README describes all of these major components: data preparation, five year window extraction, modeling, and repository structure.
 
 ---
 
 # 👥 Team & Roles
 
-### **Amy (`AmyG-LSU`) — Data Loading & Reporting**
-- Reads raw CSV/XLSX datasets into Python  
-- Performs initial cleaning and organizes dataframes  
-- Generates an exploratory data analysis (EDA) summary  
-- Contributes to written project reporting  
+### **Amy Granados (`AmyG-LSU`) -> Data Loading & Reporting**
 
-### **Carter (`cmauer2`) — Five-Year Period Extraction**
-- Determines the correct 5-year window to use  
-- Extracts, validates, and stores this period as a working dataset variable  
-- Ensures alignment across income, crime, school, and home-value series  
+- Reads raw CSV/XLSX datasets
+- Performs initial cleaning
+- Produces exploratory analysis
 
-### **Nguyen (`NguyenVu2005`) — CatBoost Model**
-- Implements CatBoostRegressor  
-- Handles preprocessing for categorical / numerical features  
-- Tunes hyperparameters and evaluates model performance  
-- Produces CatBoost feature-importance reports  
+### **Carter Mauer (`cmauer2`) -> Five Year Period Extraction & Dataset Alignment**
 
-### **Cole (`c0lbalt`) — LSTM Model**
-- Designs LSTM architecture for sequential home-value prediction  
-- Handles windowing, scaling, and sequence preparation  
-- Trains and evaluates the neural network  
-- Provides plots of predicted vs. actual values  
+- Determines correct five year modeling window
+- Ensures year alignment across income, school ratings, crime, home values, and mortgage rates
+- Creates and exports the unified dataset
+- Maintains `FIVE_YEAR_PANEL` variables inside `data_loading.py`
 
-### **Malachi (`MalachiF18`) — Repository README & Organization**
-- Manages project documentation  
-- Maintains a clean, consistent GitHub structure  
-- Ensures proper folder organization and version control standards  
+### **Nguyen Vu (`NguyenVu2005`) -> CatBoost Modeling**
+
+- Builds CatBoostRegressor
+- Tunes hyperparameters
+- Generates feature-importance plots
+
+### **Cole Heausler (`c0lbalt`) -> LSTM Modeling**
+
+- Constructs LSTM architecture
+- Creates input sequences
+- Evaluates long term predictions
+
+### **Malachi Fowler (`MalachiF18`) -> Repository Organization & Documentation**
+
+- Maintains folder structure
+- Ensures consistent documentation
+- Oversees version control workflow
 
 ---
 
 # 🎯 Project Goal
-**Predict the value of a Louisiana home 10 years into the future.**
 
-### Inputs Used
-- Current home value  
-- Location  
-- School quality ratings  
-- Crime statistics  
-- Median income  
-- Income growth  
-- Mortgage interest rate trends  
+**Predict the value of a Louisiana home ten years from any given starting year.**
 
-### Open Questions from Project Notes
-- How should inflation be incorporated?  
-- Should we predict *growth rate* or *actual home value*?  
-- How far back should historical data extend? (Team leaning toward 10–15 years)
+### Features Used
 
-(See full project notes in `/Project Notes 4444.docx`.)
+- Median household income
+- Crime totals
+- Home values
+- School DPS scores and letter grades
+- Mortgage interest rates
+- Time-dependent engineered variables
 
 ---
 
-# 📂 Repository Structure
+# 📂 Repository Structure (Updated)
 
 ```
 project-root/
@@ -74,49 +77,56 @@ project-root/
 │   ├── data_loading.py
 │   ├── catboost_model.py
 │   ├── lstm_model.py
-│   └── utils/ (optional future folder)
+│   └── utils/
 │
 ├── data/
-│   ├── Home Values Month Year.csv
+│   ├── clean/
+│   │   └── five_year_panel_2015_2019.csv
+│   ├── Median Household Income/
+│   ├── School Data Year/
 │   ├── Crime Data Month Year.csv
-│   ├── School Ratings/
-│   ├── Income Data/
-│   ├── Mortgage Rates.xlsx
-│   ├── year datasets (2014–2024)
-│   └── cleaned_data.csv
+│   ├── Home Mortgage Rates.xlsx
+│   ├── Home Values Month Year.xlsx
 │
-├── reports/
-│   ├── eda_report.md
-│   ├── model_results_catboost.md
-│   └── model_results_lstm.md
-│
-├── Project Notes 4444.docx
 ├── README.md
 └── requirements.txt
 ```
 
 ---
 
-# 🚀 How to Run the Project
+# 🧩 Five Year Window Extraction (Carter’s Contribution)
 
-### **1. Install Dependencies**
-```
-pip install -r requirements.txt
-```
+### ✔ Shared Year Coverage
 
-### **2. Run Data Loading / Cleaning**
+Common years across all datasets:
+
 ```
-python src/data_loading.py
+2015, 2016, 2017, 2018, 2019, 2021, 2022, 2023
 ```
 
-### **3. Train the CatBoost Model**
-```
-python src/catboost_model.py
-```
+2020 is missing → breaks contiguity.
 
-### **4. Train the LSTM Model**
+### ✔ Final Modeling Window
+
+**Most recent valid contiguous five year period: 2015–2019**
+
+### ✔ Dataset Construction
+
+- Clean & load each dataset
+- Filter by 2015–2019
+- Merge on `(parish, year)`
+- Merge mortgage rates by `year`
+- Expose:
+  ```
+  FIVE_YEAR_PANEL
+  FIVE_YEAR_START = 2015
+  FIVE_YEAR_END   = 2019
+  ```
+
+### ✔ Exported Dataset
+
 ```
-python src/lstm_model.py
+data/clean/five_year_panel_2015_2019.csv
 ```
 
 ---
@@ -124,29 +134,67 @@ python src/lstm_model.py
 # 🧠 Methodology Summary
 
 ### **1. Data Preparation**
-- Load all raw datasets  
-- Clean missing values, remove outliers  
-- Normalize/standardize when required  
-- Align time periods across all sources  
+
+- Manage missing values
+- Standardize parish naming
+- Align time windows
+- Verify duplicates
 
 ### **2. Feature Engineering**
-- Merge datasets by location + year  
-- Build multi-year sequences for LSTM  
-- Encode categorical variables  
+
+- Merge all indicators
+- Prepare sequences for LSTM
+- Encode categories
+- Normalize data when necessary
 
 ### **3. Modeling**
-- **CatBoost** for tabular regression  
-- **LSTM** for sequence prediction  
+
+- CatBoost for tabular regression
+- LSTM for sequential prediction
 
 ### **4. Evaluation**
-- RMSE  
-- MAE  
-- Prediction error plots  
-- Feature importance (CatBoost)  
+
+- RMSE, MAE
+- Prediction vs actual graphs
+- CatBoost feature importance
+
+---
+
+# 🚀 How to Run
+
+## Install Requirements
+
+```
+pip install -r requirements.txt
+```
+
+## Build Dataset
+
+```
+python src/data_loading.py
+```
+
+Or within Python:
+
+```python
+from src.data_loading import FIVE_YEAR_PANEL
+```
+
+## Train CatBoost
+
+```
+python src/catboost_model.py
+```
+
+## Train LSTM
+
+```
+python src/lstm_model.py
+```
 
 ---
 
 # 📘 Academic Notice
-This project is for academic use for CSC 4444 (Artificial Intelligence).  
-All contributors retain ownership of their respective work.  
-External data sources follow their original usage licenses.
+
+This project is for academic use in CSC 4444.  
+Data sources retain their original licenses.
